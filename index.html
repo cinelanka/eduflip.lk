@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EduFlip.lk — Micro-Learning Platform</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --brand:#6C3FF5;--brand-light:#EDE8FD;--brand-dark:#4B2BB5;
+  --gold:#E8950A;--gold-light:#FEF3DC;
+  --teal:#1D9E75;--teal-light:#E1F5EE;
+  --coral:#D85A30;--coral-light:#FAECE7;
+  --text:#1A1A2E;--text2:#555568;--text3:#9090A8;
+  --bg:#F8F7FF;--card:#FFFFFF;--border:#E4E0F5;
+  --r:12px;--r-sm:8px;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:15px}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;font-family:inherit}
+
+/* ===== NAV ===== */
+nav{background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;padding:0 4%}
+.nav-i{max-width:1140px;margin:auto;display:flex;align-items:center;justify-content:space-between;height:62px;gap:16px}
+.logo{font-size:22px;font-weight:800;color:var(--brand);letter-spacing:-.5px;white-space:nowrap}
+.logo span{color:var(--gold)}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{font-size:13.5px;font-weight:500;color:var(--text2);transition:.2s}
+.nav-links a:hover{color:var(--brand)}
+.nav-r{display:flex;align-items:center;gap:8px}
+.lang-btns{display:flex;gap:4px}
+.lb{padding:3px 10px;border-radius:20px;border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text3);background:transparent;transition:.2s}
+.lb.on{background:var(--brand-light);color:var(--brand);border-color:var(--brand-light)}
+.btn-g{padding:8px 15px;border:1.5px solid var(--border);border-radius:var(--r-sm);background:transparent;color:var(--text);font-size:13px;font-weight:600}
+.btn-g:hover{border-color:var(--brand);color:var(--brand)}
+.btn-p{padding:8px 18px;border:none;border-radius:var(--r-sm);background:var(--brand);color:#fff;font-size:13px;font-weight:700}
+.btn-p:hover{background:var(--brand-dark)}
+
+/* ===== HERO ===== */
+.hero{max-width:1140px;margin:auto;padding:64px 4% 56px;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+.h-badge{display:inline-flex;align-items:center;gap:6px;background:var(--brand-light);color:var(--brand);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:18px}
+.hero h1{font-size:40px;font-weight:900;line-height:1.18;letter-spacing:-1px;margin-bottom:16px}
+.hero h1 em{font-style:normal;color:var(--brand)}
+.hero p{font-size:15px;color:var(--text2);line-height:1.75;margin-bottom:26px}
+.h-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.btn-xl{padding:13px 26px;border-radius:var(--r-sm);font-size:15px;font-weight:800;border:none}
+.btn-xl.br{background:var(--brand);color:#fff}
+.btn-xl.br:hover{background:var(--brand-dark)}
+.btn-xl.bo{background:transparent;border:2px solid var(--border);color:var(--text)}
+.btn-xl.bo:hover{border-color:var(--brand);color:var(--brand)}
+.h-note{font-size:12.5px;color:var(--text3);display:flex;align-items:center;gap:6px}
+
+/* hero card */
+.hcard{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px}
+.hc-top{height:100px;border-radius:var(--r);background:#6C3FF5;display:flex;align-items:center;justify-content:center;font-size:40px;color:#fff;margin-bottom:14px}
+.hc-tag{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--brand)}
+.hc-title{font-size:14px;font-weight:800;margin:3px 0 8px}
+.hc-meta{font-size:11px;color:var(--text3);display:flex;gap:12px}
+.prog-wrap{margin:14px 0 10px}
+.prog-lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:5px}
+.prog-bar{height:7px;background:#EDE8FD;border-radius:4px}
+.prog-fill{height:100%;background:var(--brand);border-radius:4px;width:68%}
+.xp-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.xp-pill{display:inline-flex;align-items:center;gap:5px;background:var(--gold-light);color:#7A4A00;font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:20px}
+.lessons{display:flex;flex-direction:column;gap:7px}
+.lrow{display:flex;align-items:center;gap:9px;background:var(--bg);border-radius:var(--r-sm);padding:8px 10px}
+.lrow.active{border:1.5px solid var(--brand);background:#fff}
+.lic{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.lic.done{background:var(--teal-light);color:var(--teal)}
+.lic.play{background:var(--brand-light);color:var(--brand)}
+.lt{font-size:12.5px;font-weight:600;flex:1}
+.ld{font-size:10.5px;color:var(--text3)}
+
+/* ===== STATS ===== */
+.stats{background:var(--brand);padding:28px 4%}
+.stats-i{max-width:1140px;margin:auto;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.stat{text-align:center;color:#fff}
+.sn{font-size:28px;font-weight:900;line-height:1}
+.sl{font-size:12px;opacity:.78;margin-top:3px}
+
+/* ===== SECTION COMMON ===== */
+section{padding:56px 4%}
+.si{max-width:1140px;margin:auto}
+.slbl{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--brand);margin-bottom:6px}
+.stitle{font-size:28px;font-weight:900;letter-spacing:-.5px;margin-bottom:8px}
+.ssub{font-size:15px;color:var(--text2);max-width:560px;line-height:1.7}
+
+/* ===== FEATURES ===== */
+.fg{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px}
+.fc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px}
+.fic{width:46px;height:46px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px}
+.fic.p{background:var(--brand-light);color:var(--brand)}
+.fic.g{background:var(--gold-light);color:var(--gold)}
+.fic.t{background:var(--teal-light);color:var(--teal)}
+.fic.c{background:var(--coral-light);color:var(--coral)}
+.ft{font-size:15.5px;font-weight:800;margin-bottom:7px}
+.fd{font-size:13.5px;color:var(--text2);line-height:1.65}
+.ftag{display:inline-block;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:20px;margin-top:10px}
+.ftag.n{background:var(--brand-light);color:var(--brand)}
+.ftag.h{background:#FEE8E8;color:#C53030}
+.ftag.g{background:var(--gold-light);color:#7A4A00}
+
+/* ===== COURSES ===== */
+.ctabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
+.tb{padding:7px 16px;border-radius:20px;border:1.5px solid var(--border);background:transparent;font-size:12.5px;font-weight:700;color:var(--text2)}
+.tb.on,.tb:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
+.cg{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.cc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:transform .18s}
+.cc:hover{transform:translateY(-3px)}
+.ct{height:88px;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff}
+.cb{padding:11px 13px}
+.ccat{font-size:9.5px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;color:var(--brand)}
+.cn{font-size:13px;font-weight:800;margin:3px 0 8px;line-height:1.3}
+.cm{display:flex;gap:8px;font-size:10.5px;color:var(--text3);align-items:center;flex-wrap:wrap}
+.clvl{padding:2px 7px;border-radius:10px;font-size:10px;font-weight:800}
+.lbeg{background:var(--teal-light);color:#0F6E56}
+.lint{background:var(--gold-light);color:#7A4A00}
+.ladv{background:var(--brand-light);color:var(--brand-dark)}
+.free-badge{background:#FEE8E8;color:#C53030;font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:10px}
+
+/* ===== PRICING ===== */
+.psec{background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px}
+.pc{border-radius:var(--r);border:1.5px solid var(--border);padding:26px;background:var(--bg);position:relative}
+.pc.pop{border-color:var(--brand);background:var(--card)}
+.pbadge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--brand);color:#fff;font-size:11px;font-weight:800;padding:4px 16px;border-radius:20px;white-space:nowrap}
+.pplan{font-size:13px;font-weight:700;color:var(--text2)}
+.pamt{display:flex;align-items:baseline;gap:3px;margin:7px 0 3px}
+.pnum{font-size:36px;font-weight:900}
+.pper{font-size:13px;color:var(--text3)}
+.psub{font-size:12.5px;color:var(--text3);margin-bottom:18px}
+.pdiv{height:1px;background:var(--border);margin:14px 0}
+.pf{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:22px}
+.pf li{display:flex;align-items:center;gap:7px;font-size:13.5px;color:var(--text2)}
+.pf li i{font-size:15px;color:var(--teal)}
+.pf li.off{color:var(--text3)}
+.pf li.off i{color:var(--text3)}
+.pbtn{width:100%;padding:12px;border-radius:var(--r-sm);font-size:14.5px;font-weight:800;border:none}
+.pbtn.def{background:var(--brand-light);color:var(--brand)}
+.pbtn.feat{background:var(--brand);color:#fff}
+
+/* calc */
+.calc{margin-top:28px;background:#F0ECFF;border-radius:var(--r);padding:22px}
+.calc h3{font-size:15px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.cg3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
+.cg3 label{display:block;font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:5px}
+.cg3 input{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:16px;font-weight:800;background:#fff;color:var(--text)}
+.cres{background:var(--brand);color:#fff;border-radius:var(--r-sm);padding:18px;text-align:center}
+.crn{font-size:30px;font-weight:900}
+.crl{font-size:12px;opacity:.82;margin-top:3px}
+
+/* ===== HOW ===== */
+.hg{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:36px}
+.hw{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;text-align:center}
+.hstep{width:34px;height:34px;border-radius:50%;background:var(--brand);color:#fff;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.hico{font-size:30px;margin-bottom:10px}
+.htit{font-size:14.5px;font-weight:800;margin-bottom:7px}
+.hdesc{font-size:13px;color:var(--text2);line-height:1.6}
+
+/* ===== GAMIFICATION ===== */
+.gamsec{background:#F4F0FF}
+.gam-g{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start;margin-top:36px}
+.gam-left{display:flex;flex-direction:column;gap:14px}
+.badge-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.badge-item{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center}
+.badge-ico{font-size:28px;margin-bottom:6px}
+.badge-name{font-size:11px;font-weight:800;color:var(--text2)}
+.badge-item.locked{opacity:.45;filter:grayscale(1)}
+.level-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px}
+.lc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.lc-name{font-size:16px;font-weight:900}
+.lc-badge{background:var(--brand);color:#fff;font-size:12px;font-weight:800;padding:4px 12px;border-radius:20px}
+.lc-xp{font-size:13px;color:var(--text2);margin-bottom:7px}
+.lc-bar{height:10px;background:#EDE8FD;border-radius:5px}
+.lc-fill{height:100%;background:var(--brand);border-radius:5px}
+.streak-row{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:16px}
+.day-dot{height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700}
+.day-dot.done{background:var(--brand);color:#fff}
+.day-dot.today{background:var(--gold);color:#fff}
+.day-dot.miss{background:#F0ECFF;color:var(--text3)}
+.lb-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px}
+.lb-title{font-size:15px;font-weight:900;margin-bottom:14px}
+.lb-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.lb-row:last-child{border-bottom:none}
+.lb-rank{font-size:14px;font-weight:800;width:24px;color:var(--text3)}
+.lb-rank.top{color:var(--gold)}
+.lb-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+.lb-name{flex:1;font-size:13.5px;font-weight:700}
+.lb-xp{font-size:12px;color:var(--brand);font-weight:800}
+
+/* ===== COMMUNITY ===== */
+.comm-g{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:36px}
+.comm-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px}
+.comm-hd{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.comm-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.comm-ico.p{background:var(--brand-light);color:var(--brand)}
+.comm-ico.t{background:var(--teal-light);color:var(--teal)}
+.comm-title{font-size:15px;font-weight:800}
+.chat-msgs{display:flex;flex-direction:column;gap:10px}
+.msg{display:flex;gap:8px;align-items:flex-start}
+.msg-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0}
+.msg-bubble{background:var(--bg);border-radius:0 var(--r) var(--r) var(--r);padding:8px 11px;font-size:12.5px;color:var(--text2);line-height:1.5;flex:1}
+.msg-name{font-size:10.5px;font-weight:800;color:var(--text3);margin-bottom:2px}
+.job-list{display:flex;flex-direction:column;gap:10px}
+.job-item{border:1px solid var(--border);border-radius:var(--r-sm);padding:13px}
+.job-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px}
+.job-title{font-size:13.5px;font-weight:800}
+.job-pay{font-size:12px;font-weight:800;color:var(--teal)}
+.job-co{font-size:12px;color:var(--text3);margin-bottom:6px}
+.job-tags{display:flex;gap:6px;flex-wrap:wrap}
+.jtag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--brand-light);color:var(--brand)}
+.apply-btn{font-size:11.5px;font-weight:800;color:var(--brand);background:none;border:1.5px solid var(--brand);border-radius:var(--r-sm);padding:4px 12px;margin-top:8px}
+
+/* ===== INSTRUCTOR ===== */
+.inst-g{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-top:36px}
+.inst-steps{display:flex;flex-direction:column;gap:14px}
+.is{display:flex;gap:13px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:15px}
+.is-n{width:34px;height:34px;border-radius:50%;background:var(--brand-light);color:var(--brand);font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.is-t{font-size:14px;font-weight:800;margin-bottom:3px}
+.is-d{font-size:12.5px;color:var(--text2)}
+.earn-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:26px}
+.er{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.er:last-of-type{border-bottom:none}
+.el{font-size:13.5px;color:var(--text2)}
+.ev{font-size:14.5px;font-weight:800;color:var(--brand)}
+.etotal{background:#F0ECFF;border-radius:var(--r-sm);padding:14px;text-align:center;margin-top:12px}
+.etl{font-size:12.5px;color:var(--text2)}
+.etn{font-size:26px;font-weight:900;color:var(--brand);margin-top:2px}
+
+/* ===== SECURITY ===== */
+.sec-g{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:32px}
+.secc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.seci{font-size:26px;color:var(--brand);margin-bottom:9px}
+.sect{font-size:14px;font-weight:800;margin-bottom:5px}
+.secd{font-size:12.5px;color:var(--text2);line-height:1.6}
+.tech-stack{margin-top:28px;display:flex;gap:10px;flex-wrap:wrap}
+.ts{background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);padding:8px 14px;font-size:12.5px;font-weight:700;color:var(--text2);display:flex;align-items:center;gap:6px}
+
+/* ===== TESTIMONIALS ===== */
+.test-g{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:32px}
+.testc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px}
+.stars{color:var(--gold);font-size:13px;margin-bottom:11px}
+.testt{font-size:13.5px;color:var(--text2);line-height:1.7;margin-bottom:14px}
+.test-au{display:flex;align-items:center;gap:9px}
+.tau-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff}
+.tau-name{font-size:13.5px;font-weight:800}
+.tau-role{font-size:11.5px;color:var(--text3)}
+
+/* ===== CODE SECTION ===== */
+.code-sec{background:#1A1A2E}
+.code-tabs{display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:0}
+.ctab{padding:11px 18px;font-size:12.5px;font-weight:700;color:rgba(255,255,255,.45);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer}
+.ctab.on{color:#A67CFF;border-bottom-color:#6C3FF5}
+.code-body{padding:22px;overflow-x:auto}
+pre{font-family:'Courier New',monospace;font-size:12.5px;line-height:1.7;color:#E8E8F8;white-space:pre}
+.kw{color:#A67CFF}.fn{color:#7ADCFF}.str{color:#A8E6CF}.cm{color:#666888}.nm{color:#FFD980}
+
+/* ===== CTA ===== */
+.cta{background:var(--brand);padding:60px 4%;text-align:center}
+.cta h2{font-size:32px;font-weight:900;color:#fff;margin-bottom:12px;letter-spacing:-.5px}
+.cta p{font-size:15px;color:rgba(255,255,255,.8);max-width:480px;margin:0 auto 26px}
+.cta-btns{display:flex;justify-content:center;gap:12px}
+.btn-w{padding:13px 30px;background:#fff;color:var(--brand);border:none;border-radius:var(--r-sm);font-size:15px;font-weight:900}
+.btn-w:hover{background:#EDE8FD}
+.btn-ow{padding:13px 30px;background:transparent;color:#fff;border:2px solid rgba(255,255,255,.5);border-radius:var(--r-sm);font-size:15px;font-weight:700}
+
+/* ===== FOOTER ===== */
+footer{background:#12122A;padding:44px 4% 22px}
+.fi{max-width:1140px;margin:auto}
+.ftop{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:36px}
+.flogo{font-size:19px;font-weight:900;color:#fff;margin-bottom:9px}
+.flogo span{color:var(--gold)}
+.fdesc{font-size:12.5px;color:rgba(255,255,255,.42);line-height:1.7}
+.flinks h4{font-size:11.5px;font-weight:800;color:rgba(255,255,255,.55);margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}
+.flinks ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+.flinks a{font-size:12.5px;color:rgba(255,255,255,.38)}
+.flinks a:hover{color:#fff}
+.fbot{border-top:1px solid rgba(255,255,255,.08);padding-top:18px;display:flex;justify-content:space-between;font-size:11.5px;color:rgba(255,255,255,.28)}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav>
+<div class="nav-i">
+  <div class="logo">Edu<span>Flip</span>.lk</div>
+  <ul class="nav-links">
+    <li><a href="#courses">පාඨමාලා</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#pricing">මිල</a></li>
+    <li><a href="#instructors">Instructors</a></li>
+    <li><a href="#community">Community</a></li>
+  </ul>
+  <div class="nav-r">
+    <div class="lang-btns">
+      <button class="lb on" onclick="setLang('si',this)">සිං</button>
+      <button class="lb" onclick="setLang('en',this)">EN</button>
+      <button class="lb" onclick="setLang('ta',this)">தமிழ்</button>
+    </div>
+    <button class="btn-g">Login</button>
+    <button class="btn-p" id="navCta">නොමිලේ ආරම්භ</button>
+  </div>
+</div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <div>
+    <div class="h-badge"><i class="ti ti-bolt" aria-hidden="true"></i> <span id="hl-badge">ලංකාවේ #1 Micro-Learning Platform</span></div>
+    <h1 id="hl-h1">සති 2කින් ඉගෙනගෙන<br><em>ඩොලර් හොයන්න</em> පටන් ගන්න</h1>
+    <p id="hl-p">ChatGPT, Freelancing, Crypto, Shopify, No-Code — ඔක්කොම <strong>සිංහලෙන්, දෙමළෙන්, ඉංග්‍රීසියෙන්</strong>. Udemy වලින් Rs.15,000+ දෙන දේ EduFlip නිසා <strong>Rs.500/month</strong> ට ඔක්කොම.</p>
+    <div class="h-btns">
+      <button class="btn-xl br"><span id="hl-btn1">නොමිලේ ආරම්භ කරන්න</span> <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+      <button class="btn-xl bo"><i class="ti ti-player-play" aria-hidden="true"></i> <span id="hl-btn2">Demo බලන්න</span></button>
+    </div>
+    <p class="h-note"><i class="ti ti-shield-check" style="color:var(--teal)" aria-hidden="true"></i> <span id="hl-note">සතිය 1 නොමිලේ · Credit card අවශ්‍ය නැහැ · Cancel anytime</span></p>
+  </div>
+  <div class="hcard">
+    <div class="hc-top"><i class="ti ti-robot" aria-hidden="true"></i></div>
+    <div class="hc-tag">AI & Prompt Engineering</div>
+    <div class="hc-title">ChatGPT දක්ෂව භාවිත කරන හැටි</div>
+    <div class="hc-meta"><span><i class="ti ti-video" aria-hidden="true"></i> 24 videos</span><span><i class="ti ti-clock" aria-hidden="true"></i> 3h 20m</span><span><i class="ti ti-star-filled" style="color:var(--gold)" aria-hidden="true"></i> 4.9</span></div>
+    <div class="prog-wrap">
+      <div class="prog-lbl"><span>ඔබේ ප්‍රගතිය</span><span style="font-weight:800;color:var(--brand)">68%</span></div>
+      <div class="prog-bar"><div class="prog-fill"></div></div>
+    </div>
+    <div class="xp-row">
+      <div class="xp-pill"><i class="ti ti-star-filled" aria-hidden="true"></i> 1,240 XP</div>
+      <span style="font-size:11.5px;color:var(--text3)">🥇 Gold · Level 7</span>
+    </div>
+    <div class="lessons">
+      <div class="lrow"><div class="lic done"><i class="ti ti-check" aria-hidden="true"></i></div><div class="lt">Prompt Structure මූලික</div><div class="ld">7 min</div></div>
+      <div class="lrow"><div class="lic done"><i class="ti ti-check" aria-hidden="true"></i></div><div class="lt">Chain-of-Thought Method</div><div class="ld">9 min</div></div>
+      <div class="lrow active"><div class="lic play"><i class="ti ti-player-play" aria-hidden="true"></i></div><div class="lt" style="color:var(--brand)">AI Tools for Business</div><div class="ld" style="color:var(--brand);font-weight:800">▶ දැන්</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== STATS ===== -->
+<div class="stats">
+  <div class="stats-i">
+    <div class="stat"><div class="sn">25,000+</div><div class="sl">ලියාපදිංචි ශිෂ්‍යයන්</div></div>
+    <div class="stat"><div class="sn">80+</div><div class="sl">Courses (3 Languages)</div></div>
+    <div class="stat"><div class="sn">Rs.500</div><div class="sl">සම්පූර්ණ Access /month</div></div>
+    <div class="stat"><div class="sn">4.8★</div><div class="sl">Average Rating</div></div>
+    <div class="stat"><div class="sn">$220K+</div><div class="sl">Students Earned (USD)</div></div>
+  </div>
+</div>
+
+<!-- ===== FEATURES ===== -->
+<section id="features">
+<div class="si">
+  <div class="slbl">ඇයි EduFlip?</div>
+  <div class="stitle">Gen Z ට ගැළෙපෙන ඉගෙනීමේ ක්‍රමය</div>
+  <div class="ssub">Udemy English. Local institutes ලක්ෂ ගණන්. EduFlip — Rs.500 ට, සිංහලෙන්, ඔයාගේ phone ලෙස.</div>
+  <div class="fg">
+    <div class="fc"><div class="fic p"><i class="ti ti-device-mobile-vibration" aria-hidden="true"></i></div><div class="ft">Bite-Sized Videos (5–10 min)</div><div class="fd">TikTok එකක් බලනවා වගේ ඉගෙන ගන්න. Gen Z attention span ට perfect. දිනකට 20 min — සති 2ක් ඇතුළත certificate.</div><span class="ftag n">Gen Z Ready</span></div>
+    <div class="fc"><div class="fic g"><i class="ti ti-trophy" aria-hidden="true"></i></div><div class="ft">Gamified Learning</div><div class="fd">Points, Badges, Streaks, Leaderboard — Duolingo style. Profile Level Up. Certificates LinkedIn ට directly share කරන්න.</div><span class="ftag h">Most Popular</span></div>
+    <div class="fc"><div class="fic t"><i class="ti ti-users-group" aria-hidden="true"></i></div><div class="ft">Community & Job Board</div><div class="fd">සිංහල Chat Community, Live Q&A. Course complete කළාම ලංකාවේ companies වලින් Freelance jobs & internships සෘජුවම.</div><span class="ftag n">NEW</span></div>
+    <div class="fc"><div class="fic c"><i class="ti ti-language" aria-hidden="true"></i></div><div class="ft">3 Languages</div><div class="fd">සිංහල, தமிழ், English — ඔක්කොම course තුන්ම languages ලෙස available. Language switch button. සිය language ලෙස ඉගෙනගන්න.</div><span class="ftag g">Unique</span></div>
+    <div class="fc"><div class="fic p"><i class="ti ti-shield-lock" aria-hidden="true"></i></div><div class="ft">Secure Video DRM</div><div class="fd">Widevine + FairPlay DRM. Screen recording block. Dynamic watermark. Video download කරලා piracy කරන්න බැහැ.</div><span class="ftag n">Enterprise</span></div>
+    <div class="fc"><div class="fic g"><i class="ti ti-certificate" aria-hidden="true"></i></div><div class="ft">Verified Certificates</div><div class="fd">Course ඉවර කළාම QR-verified certificate. LinkedIn, CV ට add කරන්න. Employers verify කරන්න QR scan කරාවිය.</div><span class="ftag g">Job-Ready</span></div>
+  </div>
+</div>
+</section>
+
+<!-- ===== COURSES ===== -->
+<section id="courses" style="padding-top:0">
+<div class="si">
+  <div class="slbl">Future-Ready Skills</div>
+  <div class="stitle">සති 2-3ක් ඇතුළත ඉගෙනගෙන සල්ලි හොයන්න</div>
+  <div class="ctabs" id="courseTabs">
+    <button class="tb on" onclick="filterC('all',this)">ඔක්කොම</button>
+    <button class="tb" onclick="filterC('ai',this)">🤖 AI Tools</button>
+    <button class="tb" onclick="filterC('nocode',this)">⚡ No-Code</button>
+    <button class="tb" onclick="filterC('content',this)">📱 Content</button>
+    <button class="tb" onclick="filterC('freelance',this)">💰 Freelancing</button>
+    <button class="tb" onclick="filterC('crypto',this)">₿ Crypto</button>
+    <button class="tb" onclick="filterC('ecom',this)">🛒 E-Commerce</button>
+    <button class="tb" onclick="filterC('biz',this)">🏢 Online Business</button>
+  </div>
+  <div class="cg" id="coursesGrid"></div>
+</div>
+</section>
+
+<!-- ===== PRICING ===== -->
+<section class="psec" id="pricing">
+<div class="si">
+  <div class="slbl">Pricing</div>
+  <div class="stitle">Netflix වගේ — ඔක්කොම Access</div>
+  <div class="ssub">Course 1ට Rs.15,000 නෙමෙයි. Rs.500 ට 80+ Courses unlimited. Cancel anytime.</div>
+  <div class="pg">
+    <div class="pc">
+      <div class="pplan">නොමිලේ (Free)</div>
+      <div class="pamt"><div class="pnum">Rs.0</div></div>
+      <div class="psub">සදාකාලිකව — credit card නැතුව</div>
+      <div class="pdiv"></div>
+      <ul class="pf">
+        <li><i class="ti ti-check" aria-hidden="true"></i> ප්‍රථම සතිය ඔක්කොම free</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> 5 selected courses</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> Community access</li>
+        <li class="off"><i class="ti ti-x" aria-hidden="true"></i> Premium courses</li>
+        <li class="off"><i class="ti ti-x" aria-hidden="true"></i> Certificate</li>
+        <li class="off"><i class="ti ti-x" aria-hidden="true"></i> Job board</li>
+      </ul>
+      <button class="pbtn def">Free ආරම්භ</button>
+    </div>
+    <div class="pc pop">
+      <div class="pbadge">🔥 Most Popular</div>
+      <div class="pplan">Premium</div>
+      <div class="pamt"><div class="pnum">Rs.500</div><div class="pper">/month</div></div>
+      <div class="psub">= Spotify 1ක් — 80+ courses ඔක්කොම</div>
+      <div class="pdiv"></div>
+      <ul class="pf">
+        <li><i class="ti ti-check" aria-hidden="true"></i> 80+ courses unlimited</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> සිං + தமிழ் + EN</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> LinkedIn Certificates</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> Job Board full access</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> Live Q&A sessions</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> Community + Chat</li>
+      </ul>
+      <button class="pbtn feat">Premium ගන්න</button>
+    </div>
+    <div class="pc">
+      <div class="pplan">Pro Annual</div>
+      <div class="pamt"><div class="pnum">Rs.833</div><div class="pper">/month</div></div>
+      <div class="psub">Rs.10,000/year — 2 months free!</div>
+      <div class="pdiv"></div>
+      <ul class="pf">
+        <li><i class="ti ti-check" aria-hidden="true"></i> Premium ඔක්කොම</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> 1-on-1 Mentorship (monthly)</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> Offline Download (app)</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> Priority Job Placement</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> Early access new courses</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> Resume review</li>
+      </ul>
+      <button class="pbtn def">Pro ගන්න</button>
+    </div>
+  </div>
+  <div class="calc">
+    <h3><i class="ti ti-calculator" aria-hidden="true"></i> Revenue Calculator — Platform ලාභය</h3>
+    <div class="cg3">
+      <div><label>Premium Users (Rs.500)</label><input type="number" id="u1" value="3000" oninput="calcRev()"></div>
+      <div><label>Pro Users (Rs.833)</label><input type="number" id="u2" value="500" oninput="calcRev()"></div>
+      <div><label>Ad / Sponsor (Rs.)</label><input type="number" id="u3" value="100000" oninput="calcRev()"></div>
+    </div>
+    <div class="cres">
+      <div class="crn" id="revNum">Rs. 1,991,500</div>
+      <div class="crl">මාසික ආදායම (Monthly Revenue Estimate)</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section>
+<div class="si">
+  <div class="slbl">ක්‍රියාවලිය</div>
+  <div class="stitle">ආරම්භ කරන්නේ කොහොමද?</div>
+  <div class="hg">
+    <div class="hw"><div class="hstep">1</div><div class="hico">📱</div><div class="htit">ලියාපදිංචිය</div><div class="hdesc">Phone / Email. Google account. 30 seconds ඇතුළත. සිංහල, English, Tamil ලෙස select කරන්න.</div></div>
+    <div class="hw"><div class="hstep">2</div><div class="hico">🎯</div><div class="htit">Path තෝරන්න</div><div class="hdesc">AI Tools, Freelancing, Crypto, Shopify — ඔබේ goal ලෙස learning path auto-generate.</div></div>
+    <div class="hw"><div class="hstep">3</div><div class="hico">⚡</div><div class="htit">Bite-Sized ඉගෙනීම</div><div class="hdesc">දිනකට 15–20 min. 5–10 min videos. Quiz, practice. Level up + badges collect කරන්න.</div></div>
+    <div class="hw"><div class="hstep">4</div><div class="hico">💵</div><div class="htit">ඩොලර් හොයන්න</div><div class="hdesc">Certificate ලබාගෙන Job Board, Fiverr, Upwork ට apply. ලංකාවෙ ඉඳන් ඩොලර් ගේන්න.</div></div>
+  </div>
+</div>
+</section>
+
+<!-- ===== GAMIFICATION ===== -->
+<section class="gamsec">
+<div class="si">
+  <div class="slbl">Gamified Learning</div>
+  <div class="stitle">ඉගෙනීම game එකක් කරන්න</div>
+  <div class="ssub">Points, badges, streaks, leaderboard — Duolingo style. Profile level up කරද්දී ඉගෙනීම ආනන්දජනක වෙනවා.</div>
+  <div class="gam-g">
+    <div class="gam-left">
+      <div class="level-card">
+        <div class="lc-top">
+          <div class="lc-name">📱 Thisuri Senanayake</div>
+          <div class="lc-badge">Level 7 — Gold</div>
+        </div>
+        <div class="lc-xp">1,240 XP · ඊළඟ level ට 260 XP</div>
+        <div class="lc-bar"><div class="lc-fill" style="width:82%"></div></div>
+        <div style="margin-top:14px;font-size:12.5px;font-weight:700;color:var(--text3);margin-bottom:8px">🔥 14-Day Streak</div>
+        <div class="streak-row">
+          <div class="day-dot done">සෙ</div><div class="day-dot done">ඉ</div><div class="day-dot done">අ</div><div class="day-dot done">බ</div><div class="day-dot done">ගු</div><div class="day-dot done">සෙ</div><div class="day-dot today">ඉ</div>
+        </div>
+      </div>
+      <div style="font-size:13.5px;font-weight:800;color:var(--text2);margin-bottom:8px">🏅 Earned Badges</div>
+      <div class="badge-row">
+        <div class="badge-item"><div class="badge-ico">🤖</div><div class="badge-name">AI Master</div></div>
+        <div class="badge-item"><div class="badge-ico">🔥</div><div class="badge-name">7 Streak</div></div>
+        <div class="badge-item"><div class="badge-ico">💰</div><div class="badge-name">First Dollar</div></div>
+        <div class="badge-item locked"><div class="badge-ico">🏆</div><div class="badge-name">Top 10</div></div>
+      </div>
+    </div>
+    <div class="lb-card">
+      <div class="lb-title">🏆 Leaderboard — මේ සතිය</div>
+      <div class="lb-row"><div class="lb-rank top">1</div><div class="lb-av" style="background:#6C3FF5">NK</div><div class="lb-name">නිළාන් කරු.</div><div class="lb-xp">3,840 XP</div></div>
+      <div class="lb-row"><div class="lb-rank top">2</div><div class="lb-av" style="background:#1D9E75">AP</div><div class="lb-name">Amali Peiris</div><div class="lb-xp">3,210 XP</div></div>
+      <div class="lb-row"><div class="lb-rank top">3</div><div class="lb-av" style="background:#E8950A">DP</div><div class="lb-name">දිල්ශාන් ප.</div><div class="lb-xp">2,980 XP</div></div>
+      <div class="lb-row"><div class="lb-rank">4</div><div class="lb-av" style="background:#D85A30">SR</div><div class="lb-name">Suresh Raja</div><div class="lb-xp">2,450 XP</div></div>
+      <div class="lb-row" style="background:#F4F0FF;border-radius:var(--r-sm);padding:9px"><div class="lb-rank" style="color:var(--brand)">12</div><div class="lb-av" style="background:#6C3FF5">TS</div><div class="lb-name" style="color:var(--brand);font-weight:800">ඔබ (Thisuri S.)</div><div class="lb-xp">1,240 XP</div></div>
+      <div style="margin-top:16px;background:#F0ECFF;border-radius:var(--r-sm);padding:12px;font-size:13px;color:var(--text2)">
+        <strong style="color:var(--brand)">Top 10</strong> ට ගියොත් — Rs.500 Premium subscription 1 month FREE! 🎁
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ===== COMMUNITY ===== -->
+<section id="community">
+<div class="si">
+  <div class="slbl">Community & Jobs</div>
+  <div class="stitle">ඉගෙනගන්නා ගමනේ community ලෙස</div>
+  <div class="comm-g">
+    <div class="comm-card">
+      <div class="comm-hd"><div class="comm-ico p"><i class="ti ti-messages" aria-hidden="true"></i></div><div class="comm-title">EduFlip Community Chat</div></div>
+      <div class="chat-msgs">
+        <div class="msg"><div class="msg-av" style="background:#6C3FF5">NK</div><div class="msg-bubble"><div class="msg-name">නිළාන් — AI Tools</div>ChatGPT Prompt engineer කරලා client 1ට $200 charge කළා 😍 Thanks EduFlip!</div></div>
+        <div class="msg"><div class="msg-av" style="background:#1D9E75">AP</div><div class="msg-bubble"><div class="msg-name">Amali — Freelancing</div>Fiverr order 1st ගිහිල්ලා! Profile SEO lesson super helpful වුණා.</div></div>
+        <div class="msg"><div class="msg-av" style="background:#E8950A">DP</div><div class="msg-bubble"><div class="msg-name">දිල්ශාන් — No-Code</div>Bubble.io app build කරලා client deploy කළා. Coding නොදන්නා කෙනෙකුට possible! 🚀</div></div>
+        <div class="msg"><div class="msg-av" style="background:#D85A30">TS</div><div class="msg-bubble"><div class="msg-name">Thisuri — Content</div>YouTube channel 2 months ඇතුළත 5K subscribers. EduFlip SEO lesson game changer!</div></div>
+      </div>
+    </div>
+    <div class="comm-card">
+      <div class="comm-hd"><div class="comm-ico t"><i class="ti ti-briefcase" aria-hidden="true"></i></div><div class="comm-title">Job Board — Live Opportunities</div></div>
+      <div class="job-list">
+        <div class="job-item">
+          <div class="job-top"><div class="job-title">AI Prompt Engineer (Remote)</div><div class="job-pay">$500–800/mo</div></div>
+          <div class="job-co">TechLanka Pvt Ltd · Colombo</div>
+          <div class="job-tags"><span class="jtag">ChatGPT</span><span class="jtag">AI Tools</span><span class="jtag">Remote</span></div>
+          <button class="apply-btn">Apply කරන්න →</button>
+        </div>
+        <div class="job-item">
+          <div class="job-top"><div class="job-title">Shopify Store Manager</div><div class="job-pay">Rs.45,000/mo</div></div>
+          <div class="job-co">EcomSL · Kadawatha</div>
+          <div class="job-tags"><span class="jtag">Shopify</span><span class="jtag">E-Commerce</span><span class="jtag">Part-time</span></div>
+          <button class="apply-btn">Apply කරන්න →</button>
+        </div>
+        <div class="job-item">
+          <div class="job-top"><div class="job-title">Content Creator Intern</div><div class="job-pay">Rs.30,000/mo</div></div>
+          <div class="job-co">Digital Hub LK · Remote</div>
+          <div class="job-tags"><span class="jtag">TikTok</span><span class="jtag">Reels</span><span class="jtag">Fresher OK</span></div>
+          <button class="apply-btn">Apply කරන්න →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ===== INSTRUCTOR ===== -->
+<section style="background:#F4F0FF" id="instructors">
+<div class="si">
+  <div class="slbl">Instructors</div>
+  <div class="stitle">ඔබේ දැනුම Spotify-style ලාභයක් කරන්න</div>
+  <div class="inst-g">
+    <div class="inst-steps">
+      <div class="is"><div class="is-n">1</div><div><div class="is-t">Apply කරන්න</div><div class="is-d">Skill area, sample video, bio submit. Review 1 සතිය ඇතුළත.</div></div></div>
+      <div class="is"><div class="is-n">2</div><div><div class="is-t">Course නිර්මාණය</div><div class="is-d">EduFlip script template, recording guide, editing support ලබාදෙනවා.</div></div></div>
+      <div class="is"><div class="is-n">3</div><div><div class="is-t">Upload & Publish</div><div class="is-d">Secure DRM platform. Auto watermark. සිංහල/Tamil subtitle auto-generate.</div></div></div>
+      <div class="is"><div class="is-n">4</div><div><div class="is-t">ලාභය ලබාගන්න</div><div class="is-d">View count-based Spotify model. සෑම මාසෙකම Bank Transfer / eZCash.</div></div></div>
+    </div>
+    <div class="earn-card">
+      <div style="font-size:16px;font-weight:900;margin-bottom:16px">💰 Instructor Revenue Estimate</div>
+      <div class="er"><div class="el">ඔබේ Course Views (monthly)</div><div class="ev">10,000</div></div>
+      <div class="er"><div class="el">Revenue Share Rate</div><div class="ev">40%</div></div>
+      <div class="er"><div class="el">Platform Monthly Pool</div><div class="ev">Rs.2,500,000</div></div>
+      <div class="er"><div class="el">Total Platform Views</div><div class="ev">500,000</div></div>
+      <div class="er"><div class="el">ඔබේ Share (10k/500k = 2%)</div><div class="ev">2% × Rs.1M</div></div>
+      <div class="etotal">
+        <div class="etl">ඔබේ මාසික ලාභය (estimate)</div>
+        <div class="etn">Rs. 20,000+</div>
+      </div>
+      <button class="btn-p" style="width:100%;margin-top:14px;padding:12px;font-size:14.5px">Instructor ලෙස Apply කරන්න</button>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ===== SECURITY ===== -->
+<section>
+<div class="si">
+  <div class="slbl">Video Security</div>
+  <div class="stitle">Piracy 100% Block — Enterprise DRM</div>
+  <div class="ssub">Video download කරලා හොරෙන් විකිනීම වැළැක්වීමට Netflix-grade security.</div>
+  <div class="sec-g">
+    <div class="secc"><div class="seci"><i class="ti ti-lock" aria-hidden="true"></i></div><div class="sect">Widevine + FairPlay DRM</div><div class="secd">Netflix, Spotify use කරන DRM. Screen recording block. Download = encrypted only.</div></div>
+    <div class="secc"><div class="seci"><i class="ti ti-fingerprint" aria-hidden="true"></i></div><div class="sect">Dynamic Watermark</div><div class="secd">Video play ද්දී user ID + timestamp watermark auto overlay. Leak trace කරන්න exact user identify.</div></div>
+    <div class="secc"><div class="seci"><i class="ti ti-cloud-lock" aria-hidden="true"></i></div><div class="sect">Signed URL Streaming</div><div class="secd">Bunny.net / Cloudflare Stream. Expiry token. Direct link share කළාත් play නොවෙයි.</div></div>
+    <div class="secc"><div class="seci"><i class="ti ti-eye-off" aria-hidden="true"></i></div><div class="sect">Anti-Sharing Detection</div><div class="secd">Concurrent sessions 2+ = auto flag + suspend. IP + device fingerprint tracking.</div></div>
+  </div>
+  <div class="tech-stack">
+    <div class="ts"><i class="ti ti-brand-nextjs" aria-hidden="true"></i> Next.js 14</div>
+    <div class="ts"><i class="ti ti-database" aria-hidden="true"></i> PostgreSQL</div>
+    <div class="ts"><i class="ti ti-cloud" aria-hidden="true"></i> Bunny.net CDN</div>
+    <div class="ts"><i class="ti ti-shield" aria-hidden="true"></i> Widevine DRM</div>
+    <div class="ts"><i class="ti ti-brand-stripe" aria-hidden="true"></i> Stripe Payments</div>
+    <div class="ts"><i class="ti ti-brand-firebase" aria-hidden="true"></i> Firebase Auth</div>
+    <div class="ts"><i class="ti ti-server" aria-hidden="true"></i> Node.js API</div>
+    <div class="ts"><i class="ti ti-brand-vercel" aria-hidden="true"></i> Vercel Deploy</div>
+  </div>
+</div>
+</section>
+
+<!-- ===== CODE SECTION ===== -->
+<section style="background:#1A1A2E;padding:48px 4%">
+<div class="si">
+  <div style="color:#A67CFF;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Source Code</div>
+  <div style="font-size:26px;font-weight:900;color:#fff;margin-bottom:8px">EduFlip.lk — Core Architecture</div>
+  <div style="font-size:14px;color:rgba(255,255,255,.5);margin-bottom:20px">Tech stack සහ key code snippets — developer ලට reference ලෙස</div>
+  <div style="background:#0F0F1E;border-radius:var(--r);overflow:hidden;border:1px solid rgba(255,255,255,.1)">
+    <div class="code-tabs">
+      <button class="ctab on" onclick="showCode('auth',this)">Auth</button>
+      <button class="ctab" onclick="showCode('video',this)">Video DRM</button>
+      <button class="ctab" onclick="showCode('payment',this)">Payment</button>
+      <button class="ctab" onclick="showCode('gamify',this)">Gamification</button>
+      <button class="ctab" onclick="showCode('instructor',this)">Instructor Pay</button>
+    </div>
+    <div class="code-body"><pre id="codeBlock"></pre></div>
+  </div>
+</div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section>
+<div class="si">
+  <div class="slbl">Reviews</div>
+  <div class="stitle">ශිෂ්‍යයන් කියන දේ</div>
+  <div class="test-g">
+    <div class="testc"><div class="stars">★★★★★</div><div class="testt">"Rs.500 ට ChatGPT, Freelancing ඔක්කොම. දැන් Fiverr $500+ month. Life changing!"</div><div class="test-au"><div class="tau-av" style="background:#6C3FF5">NK</div><div><div class="tau-name">නිළාන් කරුණාරත්න</div><div class="tau-role">AI Consultant · Colombo</div></div></div></div>
+    <div class="testc"><div class="stars">★★★★★</div><div class="testt">"Sinhala ලෙස ඉගෙනගත්තා. English majority කරන්නේ නැහැ — EduFlip ඔක්කොම සිංහලෙන්!"</div><div class="test-au"><div class="tau-av" style="background:#1D9E75">DP</div><div><div class="tau-name">දිල්ශාන් ප්‍රියසාද්</div><div class="tau-role">No-Code Dev · Kandy</div></div></div></div>
+    <div class="testc"><div class="stars">★★★★★</div><div class="testt">"YouTube 3 months ඇතුළත 10K subscribers. EduFlip Content Creation — 2 weeks ඉවර!"</div><div class="test-au"><div class="tau-av" style="background:#E8950A">TS</div><div><div class="tau-name">Thisuri Senanayake</div><div class="tau-role">YouTuber · Gampaha</div></div></div></div>
+  </div>
+</div>
+</section>
+
+<!-- ===== CTA ===== -->
+<div class="cta">
+  <h2>ඔයාගේ Future ගොඩනගන්නේ අදමයි</h2>
+  <p>Rs.500 ට Udemy + Coursera + Local Institute ඔක්කොම. සිංහලෙන්. ඔයාගේ phone ලෙස.</p>
+  <div class="cta-btns">
+    <button class="btn-w">නොමිලේ ආරම්භ <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+    <button class="btn-ow">Courses බලන්න</button>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+<div class="fi">
+  <div class="ftop">
+    <div><div class="flogo">Edu<span>Flip</span>.lk</div><div class="fdesc">ලංකාවේ #1 Micro-Learning Platform. Future-ready skills සිංහලෙන්, தமிழில், English. Rs.500/month ට ඔක්කොම.</div></div>
+    <div class="flinks"><h4>Courses</h4><ul><li><a href="#">AI & Prompt Engineering</a></li><li><a href="#">No-Code Dev</a></li><li><a href="#">Content Creation</a></li><li><a href="#">Freelancing</a></li><li><a href="#">Crypto Trading</a></li><li><a href="#">Shopify / eBay</a></li></ul></div>
+    <div class="flinks"><h4>Company</h4><ul><li><a href="#">About Us</a></li><li><a href="#">Instructors</a></li><li><a href="#">Job Board</a></li><li><a href="#">Blog</a></li><li><a href="#">Press Kit</a></li></ul></div>
+    <div class="flinks"><h4>Support</h4><ul><li><a href="#">Help Center</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms</a></li><li><a href="#">Contact</a></li><li><a href="#">API Docs</a></li></ul></div>
+  </div>
+  <div class="fbot"><span>© 2025 EduFlip.lk · All rights reserved</span><span>🇱🇰 Made in Sri Lanka with ❤️</span></div>
+</div>
+</footer>
+
+<script>
+/* === COURSES DATA === */
+const COURSES=[
+  {cat:'ai',bg:'#6C3FF5',ico:'ti-robot',tag:'AI Tools',name:'ChatGPT & Prompt Engineering',v:24,d:'3h 20m',l:'beg',lt:'Beginner',free:true},
+  {cat:'ai',bg:'#4B2BB5',ico:'ti-wand',tag:'AI Tools',name:'Midjourney AI Art Design',v:18,d:'2h 45m',l:'int',lt:'Intermediate',free:false},
+  {cat:'ai',bg:'#7C3AED',ico:'ti-sparkles',tag:'AI Tools',name:'AI Automation for Business',v:22,d:'3h 00m',l:'int',lt:'Intermediate',free:false},
+  {cat:'nocode',bg:'#1D9E75',ico:'ti-layout',tag:'No-Code',name:'WordPress Pro Sites',v:32,d:'5h 10m',l:'beg',lt:'Beginner',free:true},
+  {cat:'nocode',bg:'#185FA5',ico:'ti-device-desktop',tag:'No-Code',name:'Bubble.io App Builder',v:28,d:'4h 30m',l:'int',lt:'Intermediate',free:false},
+  {cat:'nocode',bg:'#0F6E56',ico:'ti-browser',tag:'No-Code',name:'Webflow Modern Sites',v:20,d:'3h 15m',l:'int',lt:'Intermediate',free:false},
+  {cat:'content',bg:'#D85A30',ico:'ti-brand-tiktok',tag:'Content',name:'TikTok / Reels Editing',v:16,d:'2h 10m',l:'beg',lt:'Beginner',free:true},
+  {cat:'content',bg:'#C2185B',ico:'ti-brand-youtube',tag:'Content',name:'YouTube SEO & Thumbnails',v:20,d:'3h 00m',l:'int',lt:'Intermediate',free:false},
+  {cat:'freelance',bg:'#E8950A',ico:'ti-cash',tag:'Freelancing',name:'Fiverr Gig Setup & Dollar',v:22,d:'3h 45m',l:'beg',lt:'Beginner',free:true},
+  {cat:'freelance',bg:'#3B6D11',ico:'ti-briefcase',tag:'Freelancing',name:'Upwork Profile Mastery',v:18,d:'2h 50m',l:'int',lt:'Intermediate',free:false},
+  {cat:'freelance',bg:'#0C447C',ico:'ti-brand-linkedin',tag:'Freelancing',name:'LinkedIn Personal Branding',v:14,d:'2h 00m',l:'adv',lt:'Advanced',free:false},
+  {cat:'crypto',bg:'#F59E0B',ico:'ti-currency-bitcoin',tag:'Crypto',name:'Crypto Trading Basics',v:26,d:'4h 00m',l:'beg',lt:'Beginner',free:true},
+  {cat:'crypto',bg:'#B45309',ico:'ti-chart-line',tag:'Crypto',name:'Technical Analysis (TA)',v:30,d:'5h 30m',l:'int',lt:'Intermediate',free:false},
+  {cat:'crypto',bg:'#92400E',ico:'ti-trending-up',tag:'Crypto',name:'DeFi & Web3 Opportunities',v:22,d:'3h 45m',l:'adv',lt:'Advanced',free:false},
+  {cat:'ecom',bg:'#059669',ico:'ti-brand-shopify',tag:'E-Commerce',name:'Shopify Store from Scratch',v:28,d:'4h 20m',l:'beg',lt:'Beginner',free:true},
+  {cat:'ecom',bg:'#1D4ED8',ico:'ti-shopping-cart',tag:'E-Commerce',name:'eBay Selling Mastery',v:24,d:'3h 50m',l:'beg',lt:'Beginner',free:false},
+  {cat:'ecom',bg:'#7C3AED',ico:'ti-repeat',tag:'E-Commerce',name:'Dropshipping සිංහලෙන්',v:20,d:'3h 10m',l:'int',lt:'Intermediate',free:false},
+  {cat:'biz',bg:'#0F766E',ico:'ti-building-store',tag:'Online Business',name:'Online Business ආරම්භය',v:24,d:'3h 40m',l:'beg',lt:'Beginner',free:true},
+  {cat:'biz',bg:'#6D28D9',ico:'ti-currency-dollar',tag:'Online Business',name:'Digital Products & Passive Income',v:18,d:'2h 55m',l:'int',lt:'Intermediate',free:false},
+  {cat:'biz',bg:'#B91C1C',ico:'ti-arrows-exchange',tag:'Buy & Sell',name:'Online Buy & Sell ලාභය',v:16,d:'2h 20m',l:'beg',lt:'Beginner',free:true},
+];
+
+function filterC(cat,btn){
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderCourses(cat);
+}
+function renderCourses(cat){
+  const list=cat==='all'?COURSES:COURSES.filter(c=>c.cat===cat);
+  document.getElementById('coursesGrid').innerHTML=list.map(c=>`
+    <div class="cc">
+      <div class="ct" style="background:${c.bg}"><i class="ti ${c.ico}" aria-hidden="true"></i></div>
+      <div class="cb">
+        <div class="ccat">${c.tag} ${c.free?'<span class="free-badge">FREE</span>':''}</div>
+        <div class="cn">${c.name}</div>
+        <div class="cm">
+          <span><i class="ti ti-video" aria-hidden="true"></i> ${c.v}</span>
+          <span><i class="ti ti-clock" aria-hidden="true"></i> ${c.d}</span>
+          <span class="clvl l${c.l}">${c.lt}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+renderCourses('all');
+
+/* === REVENUE CALC === */
+function calcRev(){
+  const u1=parseInt(document.getElementById('u1').value)||0;
+  const u2=parseInt(document.getElementById('u2').value)||0;
+  const u3=parseInt(document.getElementById('u3').value)||0;
+  const t=(u1*500)+(u2*833)+u3;
+  document.getElementById('revNum').textContent='Rs. '+t.toLocaleString();
+}
+calcRev();
+
+/* === CODE SNIPPETS === */
+const codes={
+auth:`<span class="cm">// Firebase Auth + Next.js — EduFlip Login</span>
+<span class="kw">import</span> { signInWithPopup, GoogleAuthProvider } <span class="kw">from</span> <span class="str">'firebase/auth'</span>;
+<span class="kw">import</span> { getToken } <span class="kw">from</span> <span class="str">'firebase/app-check'</span>;
+
+<span class="kw">export async function</span> <span class="fn">loginWithGoogle</span>() {
+  <span class="kw">const</span> provider = <span class="kw">new</span> <span class="fn">GoogleAuthProvider</span>();
+  <span class="kw">const</span> { user } = <span class="kw">await</span> <span class="fn">signInWithPopup</span>(auth, provider);
+  
+  <span class="cm">// Save to PostgreSQL</span>
+  <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/users/sync'</span>, {
+    method: <span class="str">'POST'</span>,
+    body: <span class="fn">JSON.stringify</span>({
+      uid: user.uid,
+      email: user.email,
+      name: user.displayName,
+      lang: <span class="str">'si'</span>, <span class="cm">// si | ta | en</span>
+      plan: <span class="str">'free'</span>
+    })
+  });
+  
+  <span class="kw">return</span> user;
+}
+
+<span class="cm">// Subscription check middleware</span>
+<span class="kw">export function</span> <span class="fn">requirePremium</span>(handler) {
+  <span class="kw">return async</span> (req, res) => {
+    <span class="kw">const</span> user = <span class="kw">await</span> <span class="fn">verifyToken</span>(req.headers.authorization);
+    <span class="kw">if</span> (user.plan === <span class="str">'free'</span> && user.trialExpired) {
+      <span class="kw">return</span> res.<span class="fn">status</span>(<span class="nm">403</span>).<span class="fn">json</span>({ error: <span class="str">'Upgrade to Premium'</span> });
+    }
+    <span class="kw">return</span> <span class="fn">handler</span>(req, res);
+  };
+}`,
+
+video:`<span class="cm">// Bunny.net Secure Streaming + Watermark — EduFlip</span>
+<span class="kw">import</span> crypto <span class="kw">from</span> <span class="str">'crypto'</span>;
+
+<span class="kw">export function</span> <span class="fn">generateSignedUrl</span>(videoId, userId) {
+  <span class="kw">const</span> expiry = Math.<span class="fn">floor</span>(Date.<span class="fn">now</span>() / <span class="nm">1000</span>) + <span class="nm">3600</span>; <span class="cm">// 1hr</span>
+  <span class="kw">const</span> token = crypto
+    .<span class="fn">createHmac</span>(<span class="str">'sha256'</span>, process.env.BUNNY_TOKEN_KEY)
+    .<span class="fn">update</span>(<span class="str">`</span>${videoId}<span class="str">:</span>${userId}<span class="str">:</span>${expiry}<span class="str">`</span>)
+    .<span class="fn">digest</span>(<span class="str">'hex'</span>);
+  
+  <span class="kw">return</span> <span class="str">`https://vz-cdn.b-cdn.net/</span>${videoId}<span class="str">/play.mp4
+    ?token=</span>${token}<span class="str">&expires=</span>${expiry}<span class="str">`</span>;
+}
+
+<span class="cm">// Dynamic watermark overlay</span>
+<span class="kw">export function</span> <span class="fn">WatermarkOverlay</span>({ userId }) {
+  <span class="kw">const</span> stamp = <span class="str">`EduFlip.lk | </span>${userId.<span class="fn">slice</span>(<span class="nm">0</span>,<span class="nm">8</span>)}<span class="str">`</span>;
+  <span class="kw">return</span> (
+    &lt;div style={{
+      position: <span class="str">'absolute'</span>, opacity: <span class="nm">0.18</span>,
+      top: <span class="str">'10%'</span>, left: <span class="str">'5%'</span>,
+      color: <span class="str">'white'</span>, fontSize: <span class="nm">14</span>, pointerEvents: <span class="str">'none'</span>
+    }}&gt;{stamp}&lt;/div&gt;
+  );
+}
+
+<span class="cm">// Concurrent session block</span>
+<span class="kw">export async function</span> <span class="fn">checkConcurrentSession</span>(userId, sessionId) {
+  <span class="kw">const</span> active = <span class="kw">await</span> redis.<span class="fn">get</span>(<span class="str">`session:</span>${userId}<span class="str">`</span>);
+  <span class="kw">if</span> (active && active !== sessionId) {
+    <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">'Multiple devices not allowed'</span>);
+  }
+  <span class="kw">await</span> redis.<span class="fn">setex</span>(<span class="str">`session:</span>${userId}<span class="str">`</span>, <span class="nm">3600</span>, sessionId);
+}`,
+
+payment:`<span class="cm">// Stripe Payment — EduFlip Subscription</span>
+<span class="kw">import</span> Stripe <span class="kw">from</span> <span class="str">'stripe'</span>;
+<span class="kw">const</span> stripe = <span class="kw">new</span> <span class="fn">Stripe</span>(process.env.STRIPE_SECRET);
+
+<span class="cm">// Create subscription checkout</span>
+<span class="kw">export async function</span> <span class="fn">createCheckout</span>(userId, plan) {
+  <span class="kw">const</span> prices = {
+    premium: <span class="str">'price_premium_500_lkr'</span>,
+    pro:     <span class="str">'price_pro_833_lkr'</span>
+  };
+  
+  <span class="kw">const</span> session = <span class="kw">await</span> stripe.checkout.sessions.<span class="fn">create</span>({
+    mode: <span class="str">'subscription'</span>,
+    line_items: [{ price: prices[plan], quantity: <span class="nm">1</span> }],
+    success_url: <span class="str">'https://eduflip.lk/dashboard?success=1'</span>,
+    cancel_url:  <span class="str">'https://eduflip.lk/pricing'</span>,
+    metadata: { userId, plan },
+    payment_method_types: [<span class="str">'card'</span>],
+  });
+  
+  <span class="kw">return</span> session.url;
+}
+
+<span class="cm">// Webhook — plan update after payment</span>
+<span class="kw">export async function</span> <span class="fn">handleWebhook</span>(event) {
+  <span class="kw">if</span> (event.type === <span class="str">'checkout.session.completed'</span>) {
+    <span class="kw">const</span> { userId, plan } = event.data.object.metadata;
+    <span class="kw">await</span> db.users.<span class="fn">update</span>({ plan, planExpiry: addDays(<span class="nm">30</span>) },
+      { where: { uid: userId } });
+  }
+}`,
+
+gamify:`<span class="cm">// Gamification System — EduFlip XP & Badges</span>
+<span class="kw">const</span> XP_EVENTS = {
+  lesson_complete: <span class="nm">50</span>,
+  quiz_perfect:    <span class="nm">100</span>,
+  daily_streak:    <span class="nm">25</span>,
+  course_complete: <span class="nm">500</span>,
+  first_job_apply: <span class="nm">200</span>,
+};
+
+<span class="kw">export async function</span> <span class="fn">awardXP</span>(userId, event) {
+  <span class="kw">const</span> xp = XP_EVENTS[event] || <span class="nm">0</span>;
+  <span class="kw">const</span> user = <span class="kw">await</span> db.users.<span class="fn">findOne</span>({ where: { uid: userId } });
+  <span class="kw">const</span> newXP = user.xp + xp;
+  <span class="kw">const</span> newLevel = Math.<span class="fn">floor</span>(newXP / <span class="nm">500</span>) + <span class="nm">1</span>;
+  
+  <span class="kw">await</span> db.users.<span class="fn">update</span>({ xp: newXP, level: newLevel },
+    { where: { uid: userId } });
+  
+  <span class="kw">await</span> <span class="fn">checkBadges</span>(userId, newXP, newLevel);
+  <span class="kw">return</span> { xp: newXP, level: newLevel };
+}
+
+<span class="kw">const</span> BADGES = [
+  { id: <span class="str">'first_lesson'</span>, xpReq: <span class="nm">50</span>,   icon: <span class="str">'🎯'</span> },
+  { id: <span class="str">'streak_7'</span>,    days: <span class="nm">7</span>,    icon: <span class="str">'🔥'</span> },
+  { id: <span class="str">'ai_master'</span>,   courses: <span class="str">'ai'</span>, icon: <span class="str">'🤖'</span> },
+  { id: <span class="str">'gold_level'</span>,  level: <span class="nm">10</span>,   icon: <span class="str">'🏅'</span> },
+];
+
+<span class="kw">async function</span> <span class="fn">checkBadges</span>(userId, xp, level) {
+  <span class="kw">for</span> (<span class="kw">const</span> badge <span class="kw">of</span> BADGES) {
+    <span class="kw">if</span> (badge.xpReq && xp >= badge.xpReq)
+      <span class="kw">await</span> <span class="fn">grantBadge</span>(userId, badge.id);
+    <span class="kw">if</span> (badge.level && level >= badge.level)
+      <span class="kw">await</span> <span class="fn">grantBadge</span>(userId, badge.id);
+  }
+}`,
+
+instructor:`<span class="cm">// Instructor Revenue Share — Spotify Model</span>
+<span class="kw">export async function</span> <span class="fn">calculateInstructorPayout</span>(month) {
+  <span class="kw">const</span> SHARE_RATE = <span class="nm">0.40</span>; <span class="cm">// 40% to instructors</span>
+  
+  <span class="kw">const</span> totalRevenue = <span class="kw">await</span> db.subscriptions
+    .<span class="fn">sumRevenue</span>({ month });
+  
+  <span class="kw">const</span> pool = totalRevenue * SHARE_RATE;
+  <span class="kw">const</span> totalViews = <span class="kw">await</span> db.videoViews.<span class="fn">count</span>({ month });
+  
+  <span class="kw">const</span> instructors = <span class="kw">await</span> db.instructors.<span class="fn">findAll</span>();
+  
+  <span class="kw">for</span> (<span class="kw">const</span> inst <span class="kw">of</span> instructors) {
+    <span class="kw">const</span> instViews = <span class="kw">await</span> db.videoViews.<span class="fn">count</span>({
+      instructorId: inst.id, month
+    });
+    
+    <span class="kw">const</span> share = (instViews / totalViews) * pool;
+    <span class="kw">const</span> payout = Math.<span class="fn">round</span>(share);
+    
+    <span class="kw">await</span> db.payouts.<span class="fn">create</span>({
+      instructorId: inst.id,
+      amount: payout,
+      views: instViews,
+      month,
+      status: <span class="str">'pending'</span>
+    });
+    
+    <span class="cm">// eZCash / Bank Transfer trigger</span>
+    <span class="kw">await</span> <span class="fn">triggerBankTransfer</span>(inst.bankAccount, payout);
+    
+    console.<span class="fn">log</span>(<span class="str">`Instructor </span>${inst.name}<span class="str">: Rs.</span>${payout.<span class="fn">toLocaleString</span>()}<span class="str">`</span>);
+  }
+}`,
+};
+
+function showCode(key,btn){
+  document.querySelectorAll('.ctab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('codeBlock').innerHTML=codes[key];
+}
+showCode('auth',document.querySelector('.ctab'));
+
+/* === LANGUAGE === */
+const langs={
+  si:{badge:'ලංකාවේ #1 Micro-Learning Platform',h1:'සති 2කින් ඉගෙනගෙන<br><em>ඩොලර් හොයන්න</em> පටන් ගන්න',p:'ChatGPT, Freelancing, Crypto, Shopify — <strong>සිංහලෙන්, දෙමළෙන්, ඉංග්‍රීසියෙන්</strong>. Rs.500/month ට ඔක්කොම.',btn1:'නොමිලේ ආරම්භ කරන්න',btn2:'Demo බලන්න',note:'සතිය 1 නොමිලේ · Credit card අවශ්‍ය නැහැ · Cancel anytime',cta:'නොමිලේ ආරම්භ'},
+  en:{badge:'Sri Lanka\'s #1 Micro-Learning Platform',h1:'Learn in 2 Weeks,<br><em>Start Earning Dollars</em>',p:'ChatGPT, Freelancing, Crypto, Shopify — all in <strong>Sinhala, Tamil & English</strong>. What costs Rs.15,000+ on Udemy is just <strong>Rs.500/month</strong>.',btn1:'Start Free',btn2:'Watch Demo',note:'1 week free trial · No credit card · Cancel anytime',cta:'Start Free'},
+  ta:{badge:'இலங்கையின் #1 மைக்ரோ-லேர்னிங் தளம்',h1:'2 வாரத்தில் கற்று<br><em>டாலர் சம்பாதியுங்கள்</em>',p:'ChatGPT, Freelancing, Crypto, Shopify — <strong>சிங்களம், தமிழ், ஆங்கிலம்</strong>. Udemy-ல் Rs.15,000+ பயிற்சி Rs.500/மாதம்.',btn1:'இலவசமாக தொடங்கு',btn2:'டெமோ பார்',note:'1 வார இலவச சோதனை · கிரெடிட் கார்டு தேவையில்லை',cta:'இலவசமாக தொடங்கு'},
+};
+function setLang(l,btn){
+  document.querySelectorAll('.lb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const d=langs[l];
+  document.getElementById('hl-badge').textContent=d.badge;
+  document.getElementById('hl-h1').innerHTML=d.h1;
+  document.getElementById('hl-p').innerHTML=d.p;
+  document.getElementById('hl-btn1').textContent=d.btn1;
+  document.getElementById('hl-btn2').textContent=d.btn2;
+  document.getElementById('hl-note').textContent=d.note;
+  document.getElementById('navCta').textContent=d.cta;
+}
+</script>
+</body>
+  </html>
