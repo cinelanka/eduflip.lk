@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Course Generator — EduFlip.lk</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#F8F7FF;color:#1A1A2E;min-height:100vh}
+.header{background:#6C3FF5;padding:14px 18px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10}
+.back-btn{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;font-size:13px;font-weight:700}
+.logo{font-size:18px;font-weight:900;color:#fff}
+.logo span{color:#E8950A}
+.badge{font-size:11px;color:rgba(255,255,255,.7);margin-left:auto}
+.wrap{padding:20px 18px 100px;max-width:500px;margin:0 auto}
+
+/* FORM */
+.title{font-size:22px;font-weight:900;margin-bottom:6px}
+.sub{font-size:14px;color:#555568;margin-bottom:22px}
+.card{background:#fff;border:1px solid #E4E0F5;border-radius:14px;padding:18px;margin-bottom:14px}
+.lbl{font-size:12px;font-weight:700;color:#555568;display:block;margin-bottom:7px}
+input[type=text]{width:100%;padding:11px 14px;border:1.5px solid #E4E0F5;border-radius:10px;font-size:15px;font-family:inherit;outline:none}
+input[type=text]:focus{border-color:#6C3FF5}
+.lang-row{display:flex;gap:8px}
+.lb{flex:1;padding:9px 0;border-radius:8px;border:1.5px solid #E4E0F5;background:transparent;color:#555568;font-weight:700;font-size:13px;cursor:pointer}
+.lb.on{background:#EDE8FD;border-color:#6C3FF5;color:#6C3FF5}
+input[type=range]{width:100%;accent-color:#6C3FF5}
+.range-lbl{display:flex;justify-content:space-between;font-size:11px;color:#9090A8;margin-top:4px}
+.quick{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}
+.qt{padding:8px 6px;background:#EDE8FD;border:none;border-radius:8px;font-size:11px;font-weight:700;color:#6C3FF5;cursor:pointer}
+.gen-btn{width:100%;padding:15px;background:#6C3FF5;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:900;cursor:pointer;margin-top:4px}
+.gen-btn:hover{background:#4B2BB5}
+.err{color:#C53030;font-size:12px;margin-top:6px}
+
+/* LOADING */
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:14px}
+.spin{font-size:48px;animation:spin 1s linear infinite}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* LESSON */
+.lesson-header{background:linear-gradient(135deg,#6C3FF5,#A67CFF);border-radius:14px 14px 0 0;padding:20px 18px}
+.lesson-emoji{font-size:36px;margin-bottom:8px}
+.lesson-num{font-size:11px;color:rgba(255,255,255,.7);font-weight:700;margin-bottom:4px}
+.lesson-title{font-size:18px;font-weight:900;color:#fff;line-height:1.3}
+.lesson-body{background:#fff;border:1px solid #E4E0F5;border-radius:0 0 14px 14px;padding:18px;margin-bottom:14px}
+.point{display:flex;gap:10px;margin-bottom:12px;align-items:flex-start}
+.point-num{width:24px;height:24px;border-radius:6px;background:#EDE8FD;color:#6C3FF5;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.point-text{font-size:14px;color:#555568;line-height:1.6}
+.tip-box{background:#FEF3DC;border:1px solid #F5D48A;border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:#7A4A00}
+.quiz-card{background:#fff;border:1px solid #E4E0F5;border-radius:14px;padding:18px;margin-bottom:14px}
+.quiz-lbl{font-size:13px;font-weight:800;color:#6C3FF5;margin-bottom:10px}
+.quiz-q{font-size:14px;font-weight:700;margin-bottom:12px}
+.opt{width:100%;text-align:left;padding:10px 14px;margin-bottom:8px;border-radius:10px;border:1.5px solid #E4E0F5;background:#F8F7FF;font-size:13px;cursor:pointer;font-family:inherit;color:#1A1A2E}
+.opt.correct{background:#E1F5EE;border-color:#1D9E75;color:#1D9E75}
+.opt.wrong{background:#FEE8E8;border-color:#C53030;color:#C53030}
+.quiz-result{font-size:13px;font-weight:700;margin-top:6px}
+.prog-bar{height:4px;background:rgba(255,255,255,.3);border-radius:2px;margin-top:10px}
+.prog-fill{height:100%;background:#E8950A;border-radius:2px;transition:width .4s}
+.nav-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #E4E0F5;padding:14px 18px;display:flex;gap:10px}
+.prev-btn{flex:1;padding:13px;border-radius:10px;border:1.5px solid #E4E0F5;background:transparent;color:#555568;font-weight:700;font-size:14px;cursor:pointer}
+.next-btn{flex:2;padding:13px;border-radius:10px;border:none;background:#6C3FF5;color:#fff;font-weight:800;font-size:14px;cursor:pointer}
+.done-btn{flex:2;padding:13px;border-radius:10px;border:none;background:#1D9E75;color:#fff;font-weight:800;font-size:14px;cursor:pointer}
+.xp-pill{display:inline-flex;align-items:center;gap:5px;background:#FEF3DC;color:#7A4A00;font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:20px;margin-bottom:12px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header" id="mainHeader">
+  <div class="logo">Edu<span>Flip</span>.lk</div>
+  <div class="badge">AI Course Generator ⚡</div>
+</div>
+
+<!-- FORM -->
+<div class="wrap" id="formView">
+  <div class="title">⚡ AI Course Generator</div>
+  <div class="sub">Topic type කරන්න — AI ලෙස full course auto-generate!</div>
+
+  <div class="card">
+    <label class="lbl">Course Topic</label>
+    <input type="text" id="topicInput" placeholder="eg: ChatGPT, Fiverr, Shopify, Crypto..." onkeydown="if(event.key==='Enter')generate()">
+    <div class="err" id="errMsg"></div>
+  </div>
+
+  <div class="card">
+    <label class="lbl">Language</label>
+    <div class="lang-row">
+      <button class="lb on" onclick="setLang('si',this)">සිංහල</button>
+      <button class="lb" onclick="setLang('en',this)">English</button>
+      <button class="lb" onclick="setLang('ta',this)">தமிழ்</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="lbl">Lessons ගණන: <span id="lessonCount" style="color:#6C3FF5">5</span></label>
+    <input type="range" min="3" max="8" value="5" oninput="document.getElementById('lessonCount').textContent=this.value">
+    <div class="range-lbl"><span>3 min</span><span>8 max</span></div>
+  </div>
+
+  <button class="gen-btn" onclick="generate()">🚀 AI Course Generate කරන්න</button>
+
+  <div class="quick">
+    <button class="qt" onclick="setTopic('ChatGPT Basics')">ChatGPT</button>
+    <button class="qt" onclick="setTopic('Fiverr Freelancing')">Fiverr</button>
+    <button class="qt" onclick="setTopic('Shopify Store')">Shopify</button>
+    <button class="qt" onclick="setTopic('Crypto Trading')">Crypto</button>
+    <button class="qt" onclick="setTopic('YouTube SEO')">YouTube</button>
+    <button class="qt" onclick="setTopic('No-Code Apps')">No-Code</button>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="wrap loading" id="loadView" style="display:none">
+  <div class="spin">⚡</div>
+  <div style="font-size:18px;font-weight:800">AI Course Generate වෙනවා...</div>
+  <div style="font-size:14px;color:#555568" id="loadTopic"></div>
+</div>
+
+<!-- LESSON VIEW -->
+<div id="lessonView" style="display:none">
+  <div class="header" id="lessonHeader">
+    <button class="back-btn" onclick="backToForm()">← Back</button>
+    <div style="flex:1;font-size:13px;font-weight:700;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0 8px" id="courseTitle"></div>
+    <div style="font-size:11px;color:rgba(255,255,255,.7);white-space:nowrap" id="lessonCounter"></div>
+  </div>
+  <div style="background:#6C3FF5;padding:0 18px 12px">
+    <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+  </div>
+
+  <div class="wrap" style="padding-top:16px" id="lessonContent"></div>
+
+  <div class="nav-bar">
+    <button class="prev-btn" id="prevBtn" onclick="prevLesson()">← කලින්</button>
+    <button class="next-btn" id="nextBtn" onclick="nextLesson()">ඊළඟ →</button>
+  </div>
+</div>
+
+<script>
+let currentLang = 'si';
+let course = null;
+let currentLesson = 0;
+let quizAnswered = false;
+
+function setLang(l, btn) {
+  currentLang = l;
+  document.querySelectorAll('.lb').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+function setTopic(t) {
+  document.getElementById('topicInput').value = t;
+}
+
+async function generate() {
+  const topic = document.getElementById('topicInput').value.trim();
+  const lessons = document.querySelector('input[type=range]').value;
+  if (!topic) { document.getElementById('errMsg').textContent = 'Topic type කරන්න!'; return; }
+  document.getElementById('errMsg').textContent = '';
+
+  const langNames = { si: 'සිංහල', en: 'English', ta: 'தமிழ்' };
+
+  document.getElementById('formView').style.display = 'none';
+  document.getElementById('loadView').style.display = 'flex';
+  document.getElementById('loadTopic').textContent = '"' + topic + '" — ' + langNames[currentLang];
+
+  const prompt = `You are an expert course creator for EduFlip.lk, a Sri Lankan micro-learning platform.
+Create a ${lessons}-lesson mini course about: "${topic}"
+Language: ${langNames[currentLang]}
+Style: Simple, practical, Gen Z friendly. Each lesson max 5 bullet points.
+Return ONLY valid JSON, no markdown:
+{"courseTitle":"...","description":"...","lessons":[{"lessonNum":1,"title":"...","duration":"7 min","emoji":"🤖","keyPoints":["point 1","point 2","point 3","point 4","point 5"],"quiz":{"question":"...","options":["A) ...","B) ...","C) ...","D) ..."],"answer":"A"},"tip":"Pro tip: ..."}]}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content[0].text.replace(/```json|```/g, '').trim();
+    course = JSON.parse(text);
+    currentLesson = 0;
+    showLesson();
+  } catch(e) {
+    document.getElementById('loadView').style.display = 'none';
+    document.getElementById('formView').style.display = 'block';
+    document.getElementById('errMsg').textContent = 'Error! Try again.';
+  }
+}
+
+function showLesson() {
+  document.getElementById('loadView').style.display = 'none';
+  document.getElementById('formView').style.display = 'none';
+  document.getElementById('lessonView').style.display = 'block';
+  quizAnswered = false;
+
+  const l = course.lessons[currentLesson];
+  const total = course.lessons.length;
+
+  document.getElementById('courseTitle').textContent = course.courseTitle;
+  document.getElementById('lessonCounter').textContent = (currentLesson + 1) + '/' + total;
+  document.getElementById('progFill').style.width = ((currentLesson + 1) / total * 100) + '%';
+
+  document.getElementById('prevBtn').style.opacity = currentLesson === 0 ? '0.4' : '1';
+  document.getElementById('prevBtn').disabled = currentLesson === 0;
+
+  const isLast = currentLesson === total - 1;
+  document.getElementById('nextBtn').textContent = isLast ? '✅ Complete! 🎉' : 'ඊළඟ →';
+  document.getElementById('nextBtn').className = isLast ? 'done-btn' : 'next-btn';
+  document.getElementById('nextBtn').onclick = isLast ? backToForm : nextLesson;
+
+  const opts = l.quiz.options.map((opt, i) =>
+    `<button class="opt" id="opt${i}" onclick="answerQuiz('${opt[0]}','${l.quiz.answer}',${i})">${opt}</button>`
+  ).join('');
+
+  document.getElementById('lessonContent').innerHTML = `
+    <div class="xp-pill">⭐ +50 XP per lesson</div>
+    <div style="border-radius:14px;overflow:hidden;margin-bottom:14px">
+      <div class="lesson-header">
+        <div class="lesson-emoji">${l.emoji}</div>
+        <div class="lesson-num">LESSON ${l.lessonNum} · ${l.duration}</div>
+        <div class="lesson-title">${l.title}</div>
+      </div>
+      <div class="lesson-body">
+        ${l.keyPoints.map((p, i) => `
+          <div class="point">
+            <div class="point-num">${i + 1}</div>
+            <div class="point-text">${p}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+    <div class="tip-box">💡 ${l.tip}</div>
+    <div class="quiz-card">
+      <div class="quiz-lbl">📝 Quick Quiz</div>
+      <div class="quiz-q">${l.quiz.question}</div>
+      ${opts}
+      <div class="quiz-result" id="quizResult"></div>
+    </div>
+  `;
+}
+
+function answerQuiz(selected, correct, idx) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  document.querySelectorAll('.opt').forEach((btn, i) => {
+    btn.disabled = true;
+    if (course.lessons[currentLesson].quiz.options[i][0] === correct) btn.classList.add('correct');
+    else if (course.lessons[currentLesson].quiz.options[i][0] === selected) btn.classList.add('wrong');
+  });
+  document.getElementById('quizResult').textContent =
+    selected === correct ? '✅ නිවැරදියි! +50 XP' : '❌ නිවැරදි answer: ' + correct;
+  document.getElementById('quizResult').style.color = selected === correct ? '#1D9E75' : '#C53030';
+}
+
+function nextLesson() {
+  if (currentLesson < course.lessons.length - 1) { currentLesson++; showLesson(); window.scrollTo(0,0); }
+}
+function prevLesson() {
+  if (currentLesson > 0) { currentLesson--; showLesson(); window.scrollTo(0,0); }
+}
+function backToForm() {
+  document.getElementById('lessonView').style.display = 'none';
+  document.getElementById('formView').style.display = 'block';
+  course = null;
+}
+</script>
+</body>
+  </html>
